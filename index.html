@@ -1,15 +1,22 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Controle de Estoque e Vendas</title>
-  <link rel="stylesheet" href="style.css">
+  <title>MS Loja</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="icons/favicon.ico" type="image/x-icon">
+
+  <!-- Manifest -->
   <link rel="manifest" href="manifest.json">
+
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <header>
-    <div class="logo">Minhas vendas</div>
     <nav>
       <button class="tab-btn" data-tab="dashboard">Dashboard</button>
       <button class="tab-btn" data-tab="products">Produtos</button>
@@ -22,13 +29,44 @@
     <!-- DASHBOARD -->
     <section id="dashboard" class="tab active">
       <h2>Resumo</h2>
+
+      <div class="dashboard-filter">
+        <label>Período:</label>
+        <input type="date" id="dashboardStartDate">
+        <input type="date" id="dashboardEndDate">
+        <button id="applyDashboardFilter">Aplicar</button>
+        <button id="clearDashboardFilter">Limpar</button>
+      </div>
+
       <div class="cards">
-        <div class="card"><div class="label">Total Vendas</div><div class="value" id="totalSales">R$ 0,00</div></div>
-        <div class="card"><div class="label">Pedidos</div><div class="value" id="totalOrders">0</div></div>
-        <div class="card"><div class="label">Valor em Estoque</div><div class="value" id="stockValue">R$ 0,00</div></div>
-        <div class="card"><div class="label">Lucro Total</div><div class="value" id="totalProfit">R$ 0,00</div></div>
-        <div class="card"><div class="label">Valor Recebido</div><div class="value" id="totalPaid">R$ 0,00</div></div>
-        <div class="card"><div class="label">Valor a Receber</div><div class="value" id="totalUnpaid">R$ 0,00</div></div>
+        <div class="card">
+          <div class="label">Total Vendas</div>
+          <div class="value" id="totalSales">R$ 0,00</div>
+        </div>
+        <div class="card">
+          <div class="label">Pedidos</div>
+          <div class="value" id="totalOrders">0</div>
+        </div>
+        <div class="card">
+          <div class="label">Valor em Estoque</div>
+          <div class="value" id="stockValue">R$ 0,00</div>
+        </div>
+        <div class="card">
+          <div class="label">Produtos em Estoque</div>
+          <div class="value" id="totalProductsStock">0</div>
+        </div>
+        <div class="card">
+          <div class="label">Valor a Receber</div>
+          <div class="value" id="totalUnpaid">R$ 0,00</div>
+        </div>
+        <div class="card">
+          <div class="label">Lucro Total</div>
+          <div class="value" id="totalProfit">R$ 0,00</div>
+        </div>
+        <div class="card">
+          <div class="label">Valor Recebido</div>
+          <div class="value" id="totalPaid">R$ 0,00</div>
+        </div>
       </div>
     </section>
 
@@ -47,7 +85,14 @@
       <div class="table-container">
         <table id="productsTable">
           <thead>
-            <tr><th>Nome</th><th>SKU</th><th>Custo</th><th>Venda</th><th>Estoque</th><th>Ações</th></tr>
+            <tr>
+              <th>Nome</th>
+              <th>SKU</th>
+              <th>Custo</th>
+              <th>Venda</th>
+              <th>Estoque</th>
+              <th>Ações</th>
+            </tr>
           </thead>
           <tbody></tbody>
         </table>
@@ -71,12 +116,29 @@
         </select>
         <button id="registerSale">Registrar Venda</button>
       </div>
+
+      <!-- FILTRO DE DATA -->
+      <div class="sale-filter">
+        <label>Filtrar por data:</label>
+        <input type="date" id="filterStartDate">
+        <input type="date" id="filterEndDate">
+        <button id="applyDateFilter">Aplicar</button>
+        <button id="clearDateFilter">Limpar</button>
+      </div>
+
       <h3>Histórico de Vendas</h3>
       <div class="table-container">
         <table id="salesTable">
           <thead>
             <tr>
-              <th>Cliente</th><th>Produto</th><th>Qtd</th><th>Total</th><th>Origem</th><th>Pago?</th><th>Lucro</th><th>Data</th>
+              <th>Cliente</th>
+              <th>Produto</th>
+              <th>Qtd</th>
+              <th>Total</th>
+              <th>Origem</th>
+              <th>Pago?</th>
+              <th>Lucro</th>
+              <th>Data</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -97,12 +159,13 @@
   </main>
 
   <footer>Controle de Estoque PWA — LocalStorage</footer>
+
   <script src="app.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-        .then(()=>console.log('Service Worker registrado'));
+      navigator.serviceWorker.register('sw.js').then(() => console.log('Service Worker registrado'));
     }
   </script>
 </body>
+
 </html>

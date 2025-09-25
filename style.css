@@ -151,6 +151,33 @@ main {
   background: #eee;
 }
 
+/* ===== Filtro de Data ===== */
+.sale-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.sale-filter input,
+.sale-filter button {
+  padding: 5px 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.sale-filter button {
+  background: #1877F2;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.sale-filter button:hover {
+  opacity: 0.9;
+}
+
 /* ===== Settings ===== */
 .settings-actions {
   display: flex;
@@ -187,4 +214,29 @@ footer {
   .table-container table {
     min-width: 600px;
   }
+}
+.dashboard-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+  align-items: center;
+}
+
+.dashboard-filter input,
+.dashboard-filter button {
+  padding: 5px 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.dashboard-filter button {
+  background: #1877F2;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.dashboard-filter button:hover {
+  opacity: 0.9;
 }

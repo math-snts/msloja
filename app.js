@@ -17,6 +17,11 @@ const stockValueEl = document.getElementById('stockValue');
 const totalProfitEl = document.getElementById('totalProfit');
 const totalPaidEl = document.getElementById('totalPaid');
 const totalUnpaidEl = document.getElementById('totalUnpaid');
+const dashboardStartDateEl = document.getElementById('dashboardStartDate');
+const dashboardEndDateEl = document.getElementById('dashboardEndDate');
+const applyDashboardFilterBtn = document.getElementById('applyDashboardFilter');
+const clearDashboardFilterBtn = document.getElementById('clearDashboardFilter');
+
 
 // Products
 const productsTableBody = document.querySelector('#productsTable tbody');
@@ -36,6 +41,12 @@ const saleOriginEl = document.getElementById('saleOrigin');
 const salePaidEl = document.getElementById('salePaid');
 const registerSaleBtn = document.getElementById('registerSale');
 const salesTableBody = document.querySelector('#salesTable tbody');
+
+// Filtro de datas
+const filterStartDateEl = document.getElementById('filterStartDate');
+const filterEndDateEl = document.getElementById('filterEndDate');
+const applyDateFilterBtn = document.getElementById('applyDateFilter');
+const clearDateFilterBtn = document.getElementById('clearDateFilter');
 
 // Settings
 const exportDataBtn = document.getElementById('exportData');
@@ -58,7 +69,7 @@ function calcProfit(sale) {
   const custoUnitario = product.cost;
   if (sale.origin === 'Online') {
     const pv = product.price;
-    const valorLiquido = (pv * 0.8) - 4; 
+    const valorLiquido = (pv * 0.8) - 4;
     return (valorLiquido - custoUnitario) * sale.qty;
   } else {
     return (product.price - custoUnitario) * sale.qty;
@@ -66,22 +77,44 @@ function calcProfit(sale) {
 }
 
 // ===== Render Functions =====
-function renderDashboard() {
-  const totalSales = sales.reduce((s, v) => s + v.total, 0);
+function renderDashboard(startDate = null, endDate = null) {
+  let filteredSales = sales;
+  if (startDate) filteredSales = filteredSales.filter(s => new Date(s.date) >= startDate);
+  if (endDate) filteredSales = filteredSales.filter(s => new Date(s.date) <= endDate);
+
+  const totalSales = filteredSales.reduce((s, v) => s + v.total, 0);
   totalSalesEl.textContent = `R$ ${totalSales.toFixed(2)}`;
-  totalOrdersEl.textContent = sales.length;
+  totalOrdersEl.textContent = filteredSales.length;
+
   const stockValue = products.reduce((s, p) => s + p.cost * p.stock, 0);
   stockValueEl.textContent = `R$ ${stockValue.toFixed(2)}`;
-  const totalProfit = sales.reduce((s, v) => s + calcProfit(v), 0);
+
+  const totalProfit = filteredSales.reduce((s, v) => s + calcProfit(v), 0);
   totalProfitEl.textContent = `R$ ${totalProfit.toFixed(2)}`;
 
-  const paidSales = sales.filter(s => s.paid === 'Pago');
-  const unpaidSales = sales.filter(s => s.paid !== 'Pago');
+  const paidSales = filteredSales.filter(s => s.paid === 'Pago');
+  const unpaidSales = filteredSales.filter(s => s.paid !== 'Pago');
   const totalPaid = paidSales.reduce((s, v) => s + v.total, 0);
   const totalUnpaid = unpaidSales.reduce((s, v) => s + v.total, 0);
   totalPaidEl.textContent = `R$ ${totalPaid.toFixed(2)}`;
   totalUnpaidEl.textContent = `R$ ${totalUnpaid.toFixed(2)}`;
+
+  const totalProductsStock = products.reduce((sum, p) => sum + p.stock, 0);
+  document.getElementById('totalProductsStock').textContent = totalProductsStock;
 }
+
+applyDashboardFilterBtn.addEventListener('click', ()=>{
+  const start = dashboardStartDateEl.value ? new Date(dashboardStartDateEl.value) : null;
+  const end = dashboardEndDateEl.value ? new Date(dashboardEndDateEl.value) : null;
+  renderDashboard(start,end);
+});
+
+clearDashboardFilterBtn.addEventListener('click', ()=>{
+  dashboardStartDateEl.value='';
+  dashboardEndDateEl.value='';
+  renderDashboard();
+});
+
 
 function renderProducts() {
   productsTableBody.innerHTML = '';
@@ -109,9 +142,12 @@ function renderProducts() {
   });
 }
 
-function renderSales() {
+function renderSales(startDate = null, endDate = null) {
   salesTableBody.innerHTML = '';
   sales.forEach((s) => {
+    const saleDate = new Date(s.date);
+    if (startDate && saleDate < startDate) return;
+    if (endDate && saleDate > endDate) return;
     const lucro = calcProfit(s);
     const tr = document.createElement('tr');
     tr.innerHTML = `
@@ -124,7 +160,7 @@ function renderSales() {
         <input type="checkbox" ${s.paid === 'Pago' ? 'checked' : ''} onchange="togglePaid('${s.id}', this.checked)">
       </td>
       <td>R$ ${lucro.toFixed(2)}</td>
-      <td>${new Date(s.date).toLocaleString()}</td>
+      <td>${saleDate.toLocaleDateString()}</td>
     `;
     salesTableBody.appendChild(tr);
   });
@@ -138,7 +174,7 @@ saveProductBtn.addEventListener('click', () => {
   const cost = parseFloat(productCostEl.value);
   const price = parseFloat(productPriceEl.value);
   const stock = parseInt(productStockEl.value);
-  if (!name || isNaN(price) || isNaN(stock) || isNaN(cost)) return alert('Preencha os campos corretamente');
+  if (!name || isNaN(cost) || isNaN(price) || isNaN(stock)) return alert('Preencha os campos corretamente');
   const existingIndex = products.findIndex(p => p.id === id);
   if (existingIndex >= 0) {
     products[existingIndex] = { id, name, sku, cost, price, stock };
@@ -159,7 +195,6 @@ window.editProduct = function (id) {
   productCostEl.value = p.cost;
   productPriceEl.value = p.price;
   productStockEl.value = p.stock;
-  document.getElementById('products').classList.add('active');
 };
 
 window.removeProduct = function (id) {
@@ -216,6 +251,18 @@ window.togglePaid = function (id, isPaid) {
   renderDashboard();
 };
 
+// ===== Filtro de datas =====
+applyDateFilterBtn.addEventListener('click', () => {
+  const start = filterStartDateEl.value ? new Date(filterStartDateEl.value) : null;
+  const end = filterEndDateEl.value ? new Date(filterEndDateEl.value) : null;
+  renderSales(start, end);
+});
+clearDateFilterBtn.addEventListener('click', () => {
+  filterStartDateEl.value = '';
+  filterEndDateEl.value = '';
+  renderSales();
+});
+
 // ===== Settings =====
 exportDataBtn.addEventListener('click', () => {
   const data = { products, sales };
@@ -228,9 +275,7 @@ exportDataBtn.addEventListener('click', () => {
   URL.revokeObjectURL(url);
 });
 
-importDataBtn.addEventListener('click', () => {
-  importFileEl.click();
-});
+importDataBtn.addEventListener('click', () => importFileEl.click());
 
 importFileEl.addEventListener('change', () => {
   const file = importFileEl.files[0];

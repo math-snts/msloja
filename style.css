@@ -1,0 +1,190 @@
+/* ===== Reset básico ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== Body e cores ===== */
+body {
+  background: #f0f2f5;
+  color: #333;
+  line-height: 1.4;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1877F2;
+  color: white;
+  padding: 10px 15px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+header .logo {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+nav button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+nav button:hover {
+  opacity: 0.8;
+}
+
+/* ===== Main e Tabs ===== */
+main {
+  padding: 15px;
+}
+
+.tab {
+  display: none;
+}
+
+.tab.active {
+  display: block;
+}
+
+/* ===== Cards Dashboard ===== */
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: white;
+  flex: 1;
+  min-width: 150px;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: 0.2s;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.card .label {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.card .value {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* ===== Forms ===== */
+.product-form, .sale-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.product-form input,
+.sale-form input,
+.sale-form select {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  min-width: 120px;
+}
+
+.product-form button,
+.sale-form button,
+.settings-actions button {
+  background: #1877F2;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.product-form button:hover,
+.sale-form button:hover,
+.settings-actions button:hover {
+  opacity: 0.9;
+}
+
+/* ===== Tabelas ===== */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 10px;
+}
+
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+.table-container th,
+.table-container td {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.table-container th {
+  background: #eee;
+}
+
+/* ===== Settings ===== */
+.settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.settings-actions button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+/* ===== Footer ===== */
+footer {
+  text-align: center;
+  padding: 15px;
+  font-size: 14px;
+  color: #666;
+  margin-top: 30px;
+}
+
+/* ===== Responsividade ===== */
+@media(max-width: 768px) {
+  .cards {
+    flex-direction: column;
+  }
+  .product-form input,
+  .sale-form input,
+  .sale-form select {
+    min-width: 100%;
+  }
+  .table-container table {
+    min-width: 600px;
+  }
+}

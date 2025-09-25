@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle de Estoque e Vendas</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <header>
+    <div class="logo">Minhas vendas</div>
+    <nav>
+      <button class="tab-btn" data-tab="dashboard">Dashboard</button>
+      <button class="tab-btn" data-tab="products">Produtos</button>
+      <button class="tab-btn" data-tab="sales">Vendas</button>
+      <button class="tab-btn" data-tab="settings" title="Configurações">⚙️</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="tab active">
+      <h2>Resumo</h2>
+      <div class="cards">
+        <div class="card"><div class="label">Total Vendas</div><div class="value" id="totalSales">R$ 0,00</div></div>
+        <div class="card"><div class="label">Pedidos</div><div class="value" id="totalOrders">0</div></div>
+        <div class="card"><div class="label">Valor em Estoque</div><div class="value" id="stockValue">R$ 0,00</div></div>
+        <div class="card"><div class="label">Lucro Total</div><div class="value" id="totalProfit">R$ 0,00</div></div>
+        <div class="card"><div class="label">Valor Recebido</div><div class="value" id="totalPaid">R$ 0,00</div></div>
+        <div class="card"><div class="label">Valor a Receber</div><div class="value" id="totalUnpaid">R$ 0,00</div></div>
+      </div>
+    </section>
+
+    <!-- PRODUTOS -->
+    <section id="products" class="tab">
+      <h2>Produtos</h2>
+      <div class="product-form">
+        <input type="hidden" id="productId">
+        <input type="text" id="productName" placeholder="Nome">
+        <input type="text" id="productSKU" placeholder="SKU">
+        <input type="number" id="productCost" placeholder="Preço de Custo">
+        <input type="number" id="productPrice" placeholder="Preço de Venda">
+        <input type="number" id="productStock" placeholder="Estoque">
+        <button id="saveProduct">Salvar Produto</button>
+      </div>
+      <div class="table-container">
+        <table id="productsTable">
+          <thead>
+            <tr><th>Nome</th><th>SKU</th><th>Custo</th><th>Venda</th><th>Estoque</th><th>Ações</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- VENDAS -->
+    <section id="sales" class="tab">
+      <h2>Registrar Venda</h2>
+      <div class="sale-form">
+        <select id="saleProduct"></select>
+        <input type="number" id="saleQty" value="1" min="1">
+        <input type="text" id="saleCustomer" placeholder="Cliente">
+        <select id="saleOrigin">
+          <option value="Loja Física">Loja Física</option>
+          <option value="Online">Online</option>
+        </select>
+        <select id="salePaid">
+          <option value="Pago">Pago</option>
+          <option value="Não Pago">Não Pago</option>
+        </select>
+        <button id="registerSale">Registrar Venda</button>
+      </div>
+      <h3>Histórico de Vendas</h3>
+      <div class="table-container">
+        <table id="salesTable">
+          <thead>
+            <tr>
+              <th>Cliente</th><th>Produto</th><th>Qtd</th><th>Total</th><th>Origem</th><th>Pago?</th><th>Lucro</th><th>Data</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- CONFIGURAÇÕES -->
+    <section id="settings" class="tab">
+      <h2>Configurações</h2>
+      <div class="settings-actions">
+        <button id="exportData">📤 Exportar Dados</button>
+        <input type="file" id="importFile" style="display:none;">
+        <button id="importData">📥 Importar Dados</button>
+        <button id="resetData">🗑️ Zerar Tudo</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>Controle de Estoque PWA — LocalStorage</footer>
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(()=>console.log('Service Worker registrado'));
+    }
+  </script>
+</body>
+</html>
